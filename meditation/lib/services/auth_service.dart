@@ -17,4 +17,15 @@ class AuthService {
       throw "password or username invalid";
     }
   }
+
+  Future signin({required User user}) async {
+    late String token;
+    try {
+      final Response responese =
+          await ApiClient.dio.post("/signin", data: user.toJson());
+      return token = responese.data["token"];
+    } catch (e) {
+      throw "password or username invalid";
+    }
+  }
 }

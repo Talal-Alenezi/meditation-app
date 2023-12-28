@@ -1,21 +1,53 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:meditation/models/User_model.dart';
 import 'package:meditation/providers/auth_povider.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
+  @override
+  _SignUpPageState createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  File? _image;
+
+  Future<void> _getImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      }
+    });
+  }
 
   void signUp() {
     // Add your sign-up logic here
     String username = usernameController.text;
     String password = passwordController.text;
+    final profileImage = _image?.path ?? '';
 
     // Add validation and registration logic as needed
     print('Username: $username');
     print('Password: $password');
+    print('profile image: $profileImage');
+
+    // The rest of your sign-up logic
+    final User user = User(
+        username: username, password: password, profileImagePath: profileImage);
+    context.read<AuthProvider>().signup(user: user).then((token) {
+      if (token.isNotEmpty) {
+        print("Username is ${user.username}, token is $token");
+        GoRouter.of(context).go("/homepage");
+      }
+    });
   }
 
   @override
@@ -29,6 +61,16 @@ class SignUpPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            GestureDetector(
+              onTap: _getImage,
+              child: CircleAvatar(
+                radius: 50.0,
+                backgroundImage: _image != null ? FileImage(_image!) : null,
+                child:
+                    _image == null ? Icon(Icons.camera_alt, size: 50.0) : null,
+              ),
+            ),
+            SizedBox(height: 16.0),
             TextField(
               controller: usernameController,
               decoration: InputDecoration(labelText: 'Username'),
@@ -36,32 +78,18 @@ class SignUpPage extends StatelessWidget {
             SizedBox(height: 16.0),
             TextField(
               controller: passwordController,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                hintText:
-                    'Must contain at least one letter and one number, and at least 8 characters',
-              ),
+              decoration: InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
             SizedBox(height: 24.0),
             ElevatedButton(
-              onPressed: () {
-                final User user = User(
-                    username: usernameController.text,
-                    password: passwordController.text);
-                context.read<AuthProvider>().signup(user: user).then((token) {
-                  if (token.isNotEmpty) {
-                    print("token is $token");
-                    GoRouter.of(context).go("/homepage");
-                  }
-                });
-              },
+              onPressed: signUp,
               child: Text('Sign Up'),
             ),
             SizedBox(height: 16.0),
             TextButton(
               onPressed: () {
-                // Navigate to login page or perform relevant action
+                GoRouter.of(context).go("/signin");
               },
               child: Text('Already have an account'),
             ),

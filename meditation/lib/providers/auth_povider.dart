@@ -14,12 +14,12 @@ class AuthProvider extends ChangeNotifier {
 
   /// api verify token
 
-  // Future<String> signin({required User user}) async {
-  //   token = await AuthService().signin(user: user);
-  //   saveTokenInStorage(token);
-  //   notifyListeners();
-  //   return token;
-  // }
+  Future<String> signin({required User user}) async {
+    token = await AuthService().signin(user: user);
+    saveTokenInStorage(token);
+    notifyListeners();
+    return token;
+  }
 
   Future<void> saveTokenInStorage(String token) async {
     SharedPreferences shared = await SharedPreferences.getInstance();

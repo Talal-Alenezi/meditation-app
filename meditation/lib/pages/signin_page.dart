@@ -61,6 +61,7 @@ class SignInPage extends StatelessWidget {
                     profileImagePath: ""); // hhhhhhhhhhhhhhhhhhhhhh
                 context.read<AuthProvider>().signin(user: user).then((token) {
                   if (token.isNotEmpty) {
+                    context.read<AuthProvider>().token = token;
                     print("SIGN IN TOKEN $token");
                     GoRouter.of(context).go("/homepage");
                   }

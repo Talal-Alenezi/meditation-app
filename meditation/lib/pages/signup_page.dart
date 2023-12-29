@@ -44,7 +44,10 @@ class _SignUpPageState extends State<SignUpPage> {
         username: username, password: password, profileImagePath: profileImage);
     context.read<AuthProvider>().signup(user: user).then((token) {
       if (token.isNotEmpty) {
+        context.read<AuthProvider>().token = token;
         print("Username is ${user.username}, token is $token");
+
+        // ("/homepage")
         GoRouter.of(context).go("/homepage");
       }
     });

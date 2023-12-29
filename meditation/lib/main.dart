@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:meditation/pages/home_page.dart';
+import 'package:meditation/pages/profile_page.dart';
 import 'package:meditation/pages/signin_page.dart';
 import 'package:meditation/pages/signup_page.dart';
 import 'package:meditation/providers/auth_povider.dart';
@@ -37,6 +38,13 @@ final GoRouter _router = GoRouter(
       path: '/signin',
       builder: (BuildContext context, GoRouterState state) {
         return SignInPage();
+      },
+    ),
+    GoRoute(
+      name: "profile",
+      path: '/profile',
+      builder: (BuildContext context, GoRouterState state) {
+        return ProfilePage();
       },
     ),
     // GoRoute(

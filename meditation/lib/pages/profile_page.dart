@@ -1,7 +1,5 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:meditation/models/User_model.dart';
 import 'package:meditation/providers/auth_povider.dart';
 import 'package:provider/provider.dart';
@@ -11,11 +9,14 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final token = context.watch<AuthProvider>().token;
-    //   if (token.isNotEmpty && JwtDecoder.getExpirationDate(token)!.isAfter(DateTime.now())) {
-    //   user = User.fromJson(Jwt.parseJwt(token));
-
-    // }
+    String username = '';
+    final token = context.watch<AuthProvider>().token;
+    if (token.isNotEmpty) {
+      Map<String, dynamic>? decodedToken = Jwt.parseJwt(token);
+      username = decodedToken['username'];
+      print('Username from token: $username');
+      // user = User.fromJson(Jwt.parseJwt(token).toString()).toString();
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('User Profile'),
@@ -30,7 +31,7 @@ class ProfilePage extends StatelessWidget {
                 backgroundImage: NetworkImage(""),
               ),
               SizedBox(height: 20),
-              Text(""),
+              Text(username),
               SizedBox(height: 20),
               Text(
                 'Finished Exercises:',

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:meditation/models/User_model.dart';
@@ -48,7 +47,7 @@ class _SignUpPageState extends State<SignUpPage> {
         print("Username is ${user.username}, token is $token");
 
         // ("/homepage")
-        GoRouter.of(context).go("/homepage");
+        GoRouter.of(context).go("/profile");
       }
     });
   }

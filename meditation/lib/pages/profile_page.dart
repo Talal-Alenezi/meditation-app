@@ -15,7 +15,6 @@ class ProfilePage extends StatelessWidget {
       Map<String, dynamic>? decodedToken = Jwt.parseJwt(token);
       username = decodedToken['username'];
       print('Username from token: $username');
-      // user = User.fromJson(Jwt.parseJwt(token).toString()).toString();
     }
     return Scaffold(
       appBar: AppBar(

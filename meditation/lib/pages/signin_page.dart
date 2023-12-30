@@ -63,7 +63,7 @@ class SignInPage extends StatelessWidget {
                   if (token.isNotEmpty) {
                     context.read<AuthProvider>().token = token;
                     print("SIGN IN TOKEN $token");
-                    GoRouter.of(context).go("/profile");
+                    GoRouter.of(context).go("/homepage");
                   }
                   // Example: Print the username and password}
                 });

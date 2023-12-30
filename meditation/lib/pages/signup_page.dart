@@ -47,7 +47,7 @@ class _SignUpPageState extends State<SignUpPage> {
         print("Username is ${user.username}, token is $token");
 
         // ("/homepage")
-        GoRouter.of(context).go("/profile");
+        GoRouter.of(context).go("/homepage");
       }
     });
   }

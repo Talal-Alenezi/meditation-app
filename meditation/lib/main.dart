@@ -4,13 +4,16 @@ import 'package:meditation/pages/home_page.dart';
 import 'package:meditation/pages/profile_page.dart';
 import 'package:meditation/pages/signin_page.dart';
 import 'package:meditation/pages/signup_page.dart';
+import 'package:meditation/pages/tips_page.dart';
 import 'package:meditation/providers/auth_povider.dart';
+import 'package:meditation/providers/tips_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MultiProvider(
-      providers: [ChangeNotifierProvider(create: (context) => AuthProvider())],
-      child: MyApp()));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => AuthProvider()),
+    ChangeNotifierProvider(create: (context) => TipsProvider()),
+  ], child: MyApp()));
 }
 
 final GoRouter _router = GoRouter(
@@ -45,6 +48,13 @@ final GoRouter _router = GoRouter(
       path: '/profile',
       builder: (BuildContext context, GoRouterState state) {
         return ProfilePage();
+      },
+    ),
+    GoRoute(
+      name: "tips",
+      path: '/tips',
+      builder: (BuildContext context, GoRouterState state) {
+        return TipsPage();
       },
     ),
     // GoRoute(

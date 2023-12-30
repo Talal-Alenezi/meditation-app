@@ -39,25 +39,32 @@ class HomePage extends StatelessWidget {
       body: ListView.builder(
         itemCount: cards.length,
         itemBuilder: (context, index) {
-          return Card(
-            elevation: 5.0,
-            margin: EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Icon(
-                  cards[index]['icon'],
-                  size: 150.0,
-                  color: Theme.of(context).primaryColor,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    cards[index]['title'],
-                    style:
-                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+          return InkWell(
+            onTap: () {
+              if (cards[index]["title"] == "Tips") {
+                GoRouter.of(context).push("/tips");
+              }
+            },
+            child: Card(
+              elevation: 5.0,
+              margin: EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Icon(
+                    cards[index]['icon'],
+                    size: 150.0,
+                    color: Theme.of(context).primaryColor,
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      cards[index]['title'],
+                      style: TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },

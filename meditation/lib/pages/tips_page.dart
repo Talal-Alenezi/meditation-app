@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:meditation/models/tips_model.dart';
 import 'package:meditation/providers/auth_povider.dart';
 import 'package:meditation/providers/tips_provider.dart';
+import 'package:meditation/services/cllient.dart';
 import 'package:provider/provider.dart';
 
 class TipsPage extends StatefulWidget {
@@ -107,6 +109,67 @@ class _TipsPageState extends State<TipsPage>
                 // physics: const NeverScrollableScrollPhysics(),
                 itemCount: tipsProvider.tipsList.length,
                 itemBuilder: (context, index) {
+                  /////////////////////////////////////////////////////////
+                  ///               upvote & downvote
+                  /////////////////////////////////////////////////////////
+                  String username = '';
+                  final token = context.watch<AuthProvider>().token;
+                  if (token.isNotEmpty) {
+                    Map<String, dynamic>? decodedToken = Jwt.parseJwt(token);
+                    username = decodedToken['username'];
+                    print('Username from token: $username');
+                  }
+
+                  var upvoteTips = [];
+                  var downvoteTips = [];
+
+                  Future<void> upvoteTip(int? Id) async {
+                    if (!upvoteTips.contains(Id)) {
+                      try {
+                        await ApiClient.put('/tips/$Id/upvote');
+                        final upvote =
+                            tipsProvider.tipsList.firstWhere((e) => e.id == Id);
+                        if (upvote.upvotes!.isNotEmpty) {
+                          setState(() {
+                            upvote.upvotesCount++;
+                            upvote.upvotes?.add(username);
+
+                            if (upvote.downvotes!.contains(username)) {
+                              upvote.downvotes!.remove(username);
+                              upvote.downvotesCount--;
+                            }
+                          });
+                        }
+                      } catch (error) {
+                        print('Error upvoting tip: $error');
+                      }
+                    }
+                  }
+
+                  Future<void> downvoteTip(int? Id) async {
+                    if (!downvoteTips.contains(Id)) {
+                      try {
+                        await ApiClient.put('/tips/$Id/downvote');
+                        final downvote =
+                            tipsProvider.tipsList.firstWhere((e) => e.id == Id);
+                        if (downvote.downvotes!.isNotEmpty) {
+                          setState(() {
+                            downvote.downvotesCount++;
+                            downvote.downvotes?.add(username);
+
+                            if (downvote.upvotes!.contains(username)) {
+                              downvote.upvotes!.remove(username);
+                              downvote.upvotesCount--;
+                            }
+                          });
+                        }
+                      } catch (error) {
+                        print('Error upvoting tip: $error');
+                      }
+                    }
+                  }
+
+                  /////////////////////////////end////////////////////////////////
                   return Card(
                     child: ListTile(
                       title: Text("${tipsProvider.tipsList[index].text}"),
@@ -116,7 +179,9 @@ class _TipsPageState extends State<TipsPage>
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              upvoteTip(tipsProvider.tipsList[index].id);
+                            },
                             icon: Icon(Icons.arrow_drop_up),
                           ),
                           Text(
@@ -124,7 +189,9 @@ class _TipsPageState extends State<TipsPage>
                           ),
                           SizedBox(width: 10),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              downvoteTip(tipsProvider.tipsList[index].id);
+                            },
                             icon: Icon(Icons.arrow_drop_down),
                           ),
                           Text(
@@ -187,7 +254,7 @@ class _TipsPageState extends State<TipsPage>
                             icon: Icon(Icons.arrow_drop_down),
                           ),
                           Text(
-                            '${tipsProvider.myTipsList[index].downvotes?.length}', // Replace with actual downvote count
+                            '${tipsProvider.myTipsList[index].downvotes?.length}',
                           ),
                         ],
                       ),

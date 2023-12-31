@@ -16,10 +16,26 @@ class MyApp extends StatelessWidget {
 
 class HomePage extends StatelessWidget {
   final List<Map<String, dynamic>> cards = [
-    {'title': 'Tips', 'icon': Icons.lightbulb_rounded},
-    {'title': 'Yoga Videos', 'icon': Icons.ondemand_video_rounded},
-    {'title': 'Music', 'icon': Icons.music_note_rounded},
-    {'title': 'Meditation', 'icon': Icons.mood_rounded},
+    {
+      'title': 'Tips',
+      'icon': Icons.lightbulb_rounded,
+      'route': 'tips',
+    },
+    {
+      'title': 'Yoga Videos',
+      'icon': Icons.ondemand_video_rounded,
+      'route': 'yogaVideos',
+    },
+    {
+      'title': 'Music',
+      'icon': Icons.music_note_rounded,
+      'route': 'music',
+    },
+    {
+      'title': 'Meditation',
+      'icon': Icons.mood_rounded,
+      'route': 'meditation',
+    },
   ];
 
   @override
@@ -41,9 +57,7 @@ class HomePage extends StatelessWidget {
         itemBuilder: (context, index) {
           return InkWell(
             onTap: () {
-              if (cards[index]["title"] == "Tips") {
-                GoRouter.of(context).push("/tips");
-              }
+              GoRouter.of(context).push("/${cards[index]['route']}");
             },
             child: Card(
               elevation: 5.0,

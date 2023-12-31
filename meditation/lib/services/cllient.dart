@@ -28,7 +28,7 @@ class ApiClient {
   static Future<Response> post(String path, {Object? data}) async {
     await addAuthToken();
     try {
-      return await dio.get(path, data: data);
+      return await dio.post(path, data: data);
     } catch (error) {
       throw error.toString();
     }

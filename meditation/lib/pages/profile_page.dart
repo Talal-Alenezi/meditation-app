@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:meditation/models/User_model.dart';
 import 'package:meditation/providers/auth_povider.dart';
 import 'package:provider/provider.dart';
 

@@ -11,4 +11,14 @@ class TipsProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  Future<void> addTip(String newTip) async {
+    try {
+      await _tipsService.addTip(newTip);
+      await getTips(); // Update the tips list after adding a new tip
+    } catch (e) {
+      print('Error adding tip: $e');
+      // Handle the error as needed, for example, show a snackbar
+    }
+  }
 }

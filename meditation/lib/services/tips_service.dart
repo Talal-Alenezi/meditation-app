@@ -14,4 +14,14 @@ class TipsServices {
       throw e.toString();
     }
   }
+
+  addTip(newTip) async {
+    try {
+      final Response response =
+          await ApiClient.post("/tips", data: {"text": newTip});
+      return response.data;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }

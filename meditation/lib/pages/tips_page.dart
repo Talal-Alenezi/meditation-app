@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:meditation/providers/auth_povider.dart';
 import 'package:meditation/providers/tips_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:meditation/models/tips_model.dart';
 
 class TipsPage extends StatefulWidget {
   const TipsPage({Key? key}) : super(key: key);
@@ -63,6 +63,12 @@ class _TipsPageState extends State<TipsPage>
         title: const Text('Tips'),
         actions: [
           IconButton(
+            icon: Icon(Icons.person),
+            onPressed: () {
+              GoRouter.of(context).push('/profile');
+            },
+          ),
+          IconButton(
             icon: Icon(Icons.add),
             onPressed: () => _showAddTipDialog(context),
           ),
@@ -104,8 +110,8 @@ class _TipsPageState extends State<TipsPage>
                   return Card(
                     child: ListTile(
                       title: Text("${tipsProvider.tipsList[index].text}"),
-                      subtitle: Text(
-                          'By: ${tipsProvider.tipsList[index].author}'),
+                      subtitle:
+                          Text('By: ${tipsProvider.tipsList[index].author}'),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -163,8 +169,8 @@ class _TipsPageState extends State<TipsPage>
                   return Card(
                     child: ListTile(
                       title: Text("${tipsProvider.myTipsList[index].text}"),
-                      subtitle: Text(
-                          'By: ${tipsProvider.myTipsList[index].author}'),
+                      subtitle:
+                          Text('By: ${tipsProvider.myTipsList[index].author}'),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

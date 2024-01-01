@@ -230,6 +230,26 @@ class _TipsPageState extends State<TipsPage>
         } else {
           return Consumer<TipsProvider>(
             builder: (context, tipsProvider, child) {
+              /// to delete myTip
+              var deletedTips = [];
+              Future<void> deleteTip(int? id) async {
+                if (deletedTips.contains(id)) {}
+                try {
+                  await ApiClient.delete('/tips/$id');
+
+                  tipsProvider.tipsList.removeWhere((e) => e.id == id);
+                  tipsProvider.myTipsList.removeWhere((e) => e.id == id);
+                  setState(() {
+                    tipsProvider.tipsList = tipsProvider.tipsList;
+                    tipsProvider.myTipsList = tipsProvider.myTipsList;
+                  });
+                } catch (error) {
+                  print('Error deleting tip: $error');
+                }
+                tipsProvider.getTips();
+                tipsProvider.myTips(username);
+              }
+
               return ListView.builder(
                 shrinkWrap: true,
                 itemCount: tipsProvider.myTipsList.length,
@@ -240,7 +260,10 @@ class _TipsPageState extends State<TipsPage>
                         subtitle: Text(
                             'By: ${tipsProvider.myTipsList[index].author}'),
                         trailing: IconButton(
-                            onPressed: () {}, icon: Icon(Icons.delete))),
+                            onPressed: () {
+                              deleteTip(tipsProvider.myTipsList[index].id);
+                            },
+                            icon: Icon(Icons.delete))),
                   );
                 },
               );

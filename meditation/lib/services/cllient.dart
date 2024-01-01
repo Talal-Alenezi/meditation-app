@@ -42,6 +42,15 @@ class ApiClient {
       throw error.toString();
     }
   }
+
+  static Future<Response> delete(String path, {Object? data}) async {
+    await addAuthToken();
+    try {
+      return await dio.delete(path, data: data);
+    } catch (error) {
+      throw error.toString();
+    }
+  }
 }
 
 class NamedRoutes {

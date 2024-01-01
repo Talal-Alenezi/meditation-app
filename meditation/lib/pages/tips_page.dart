@@ -5,6 +5,7 @@ import 'package:meditation/providers/auth_povider.dart';
 import 'package:meditation/providers/tips_provider.dart';
 import 'package:meditation/services/cllient.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class TipsPage extends StatefulWidget {
   const TipsPage({Key? key}) : super(key: key);
@@ -172,6 +173,11 @@ class _TipsPageState extends State<TipsPage>
                     tipsProvider.getTips();
                   }
 
+                  //share function
+                  void shareTip(String? text) {
+                    Share.share(text!);
+                  }
+
                   return Card(
                     child: ListTile(
                       title: Text("${tipsProvider.tipsList[index].text}"),
@@ -199,6 +205,16 @@ class _TipsPageState extends State<TipsPage>
                           Text(
                             '${tipsProvider.tipsList[index].downvotes?.length}',
                           ),
+                          SizedBox(width: 30),
+                          // share button
+                          IconButton(
+                              onPressed: () {
+                                shareTip(tipsProvider.tipsList[index].text);
+                              },
+                              icon: Icon(
+                                Icons.share,
+                                size: 20,
+                              )),
                         ],
                       ),
                     ),

@@ -61,8 +61,10 @@ class _SignUpPageState extends State<SignUpPage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(
+              height: 85,
+            ),
             GestureDetector(
               onTap: _getImage,
               child: CircleAvatar(
@@ -88,7 +90,7 @@ class _SignUpPageState extends State<SignUpPage> {
               onPressed: signUp,
               child: Text('Sign Up'),
             ),
-            SizedBox(height: 16.0),
+            SizedBox(height: 6.0),
             TextButton(
               onPressed: () {
                 GoRouter.of(context).go("/signin");

@@ -70,6 +70,12 @@ class SignInPage extends StatelessWidget {
               },
               child: Text('Sign In'),
             ),
+            SizedBox(height: 6.0),
+            TextButton(
+                onPressed: () {
+                  context.go("/");
+                },
+                child: Text("Don't have an account? Sign up")),
           ],
         ),
       ),

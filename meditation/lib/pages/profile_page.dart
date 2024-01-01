@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:meditation/providers/auth_povider.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,13 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('User Profile'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                context.go("/signin");
+              },
+              icon: Icon(Icons.logout))
+        ],
       ),
       body: Center(
         child: Consumer<AuthProvider>(

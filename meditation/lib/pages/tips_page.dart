@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:meditation/models/tips_model.dart';
 import 'package:meditation/providers/auth_povider.dart';
 import 'package:meditation/providers/tips_provider.dart';
 import 'package:meditation/services/cllient.dart';
@@ -104,14 +103,16 @@ class _TipsPageState extends State<TipsPage>
         } else {
           return Consumer<TipsProvider>(
             builder: (context, tipsProvider, child) {
+              //to sort the tips by the votes
+              tipsProvider.tipsList.sort((case1, case2) =>
+                  (case2.upvotesCount - case2.downvotesCount)
+                      .compareTo(case1.upvotesCount - case1.downvotesCount));
               return ListView.builder(
                 shrinkWrap: true,
-                // physics: const NeverScrollableScrollPhysics(),
                 itemCount: tipsProvider.tipsList.length,
                 itemBuilder: (context, index) {
-                  /////////////////////////////////////////////////////////
-                  ///               upvote & downvote
-                  /////////////////////////////////////////////////////////
+                  ///upvote & downvote
+
                   String username = '';
                   final token = context.watch<AuthProvider>().token;
                   if (token.isNotEmpty) {
@@ -144,6 +145,7 @@ class _TipsPageState extends State<TipsPage>
                         print('Error upvoting tip: $error');
                       }
                     }
+                    tipsProvider.getTips();
                   }
 
                   Future<void> downvoteTip(int? Id) async {
@@ -167,9 +169,9 @@ class _TipsPageState extends State<TipsPage>
                         print('Error upvoting tip: $error');
                       }
                     }
+                    tipsProvider.getTips();
                   }
 
-                  /////////////////////////////end////////////////////////////////
                   return Card(
                     child: ListTile(
                       title: Text("${tipsProvider.tipsList[index].text}"),
@@ -195,7 +197,7 @@ class _TipsPageState extends State<TipsPage>
                             icon: Icon(Icons.arrow_drop_down),
                           ),
                           Text(
-                            '${tipsProvider.tipsList[index].downvotes?.length}', // Replace with actual downvote count
+                            '${tipsProvider.tipsList[index].downvotes?.length}',
                           ),
                         ],
                       ),
@@ -230,35 +232,15 @@ class _TipsPageState extends State<TipsPage>
             builder: (context, tipsProvider, child) {
               return ListView.builder(
                 shrinkWrap: true,
-                // physics: const NeverScrollableScrollPhysics(),
                 itemCount: tipsProvider.myTipsList.length,
                 itemBuilder: (context, index) {
                   return Card(
                     child: ListTile(
-                      title: Text("${tipsProvider.myTipsList[index].text}"),
-                      subtitle:
-                          Text('By: ${tipsProvider.myTipsList[index].author}'),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.arrow_drop_up),
-                          ),
-                          Text(
-                            '${tipsProvider.myTipsList[index].upvotes?.length}',
-                          ),
-                          SizedBox(width: 10),
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.arrow_drop_down),
-                          ),
-                          Text(
-                            '${tipsProvider.myTipsList[index].downvotes?.length}',
-                          ),
-                        ],
-                      ),
-                    ),
+                        title: Text("${tipsProvider.myTipsList[index].text}"),
+                        subtitle: Text(
+                            'By: ${tipsProvider.myTipsList[index].author}'),
+                        trailing: IconButton(
+                            onPressed: () {}, icon: Icon(Icons.delete))),
                   );
                 },
               );

@@ -30,7 +30,11 @@ class _TipsPageState extends State<TipsPage>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Add a New Tip'),
+          title: Text('Add a New Tip',
+              style: TextStyle(
+                  color: const Color.fromARGB(255, 122, 128, 133),
+                  fontSize: 25,
+                  fontWeight: FontWeight.w800)),
           content: TextField(
             controller: tipController,
             decoration: InputDecoration(labelText: 'Enter your tip'),
@@ -40,9 +44,13 @@ class _TipsPageState extends State<TipsPage>
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text('Cancel'),
+              child: Text('Cancel',
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 122, 128, 133),
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold)),
             ),
-            ElevatedButton(
+            TextButton(
               onPressed: () {
                 String newTip = tipController.text;
                 Navigator.of(context).pop(); // Close the dialog
@@ -50,7 +58,11 @@ class _TipsPageState extends State<TipsPage>
                   context.read<TipsProvider>().addTip(newTip);
                 }
               },
-              child: Text('Add Tip'),
+              child: Text('Add Tip',
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 122, 128, 133),
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold)),
             ),
           ],
         );
@@ -190,7 +202,10 @@ class _TipsPageState extends State<TipsPage>
                             onPressed: () {
                               upvoteTip(tipsProvider.tipsList[index].id);
                             },
-                            icon: Icon(Icons.arrow_drop_up),
+                            icon: Icon(
+                              Icons.arrow_drop_up,
+                              color: Colors.green,
+                            ),
                           ),
                           Text(
                             '${tipsProvider.tipsList[index].upvotes?.length}',
@@ -200,7 +215,8 @@ class _TipsPageState extends State<TipsPage>
                             onPressed: () {
                               downvoteTip(tipsProvider.tipsList[index].id);
                             },
-                            icon: Icon(Icons.arrow_drop_down),
+                            icon:
+                                Icon(Icons.arrow_drop_down, color: Colors.red),
                           ),
                           Text(
                             '${tipsProvider.tipsList[index].downvotes?.length}',

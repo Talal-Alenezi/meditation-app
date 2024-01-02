@@ -67,7 +67,6 @@ class HomePage extends StatelessWidget {
                   Icon(
                     cards[index]['icon'],
                     size: 150.0,
-                    color: Theme.of(context).primaryColor,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),

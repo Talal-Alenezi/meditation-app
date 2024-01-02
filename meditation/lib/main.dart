@@ -9,6 +9,7 @@ import 'package:meditation/pages/tips_page.dart';
 import 'package:meditation/providers/auth_povider.dart';
 import 'package:meditation/providers/exercises_provider.dart';
 import 'package:meditation/providers/tips_provider.dart';
+import 'package:meditation/theme/theme.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -73,10 +74,10 @@ final GoRouter _router = GoRouter(
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      theme: lightMode,
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
     );

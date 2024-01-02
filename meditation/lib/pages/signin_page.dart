@@ -15,6 +15,8 @@ class MyApp extends StatelessWidget {
       home: SignInPage(),
     );
   }
+
+  static of(BuildContext context) {}
 }
 
 class SignInPage extends StatelessWidget {
@@ -39,43 +41,63 @@ class SignInPage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: ListView(
           children: [
-            TextField(
-              controller: usernameController,
-              decoration: InputDecoration(labelText: 'Username'),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 200,
+                ),
+                TextField(
+                  controller: usernameController,
+                  decoration: InputDecoration(labelText: 'Username'),
+                ),
+                SizedBox(height: 16.0),
+                TextField(
+                  controller: passwordController,
+                  decoration: InputDecoration(labelText: 'Password'),
+                  obscureText: true,
+                ),
+                SizedBox(height: 24.0),
+                ElevatedButton(
+                  onPressed: () {
+                    final User user = User(
+                        username: usernameController.text,
+                        password: passwordController.text,
+                        profileImagePath: ""); // hhhhhhhhhhhhhhhhhhhhhh
+                    context
+                        .read<AuthProvider>()
+                        .signin(user: user)
+                        .then((token) {
+                      if (token.isNotEmpty) {
+                        context.read<AuthProvider>().token = token;
+                        print("SIGN IN TOKEN $token");
+                        GoRouter.of(context).go("/homepage");
+                      }
+                      // Example: Print the username and password}
+                    });
+                  },
+                  child: Text('Sign In',
+                      style: TextStyle(
+                          color: const Color.fromARGB(255, 122, 128, 133),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold)),
+                ),
+                SizedBox(height: 6.0),
+                TextButton(
+                    onPressed: () {
+                      context.go("/");
+                    },
+                    child: Text("Don't have an account? Sign up",
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 155, 165, 173),
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                            decorationThickness: .5))),
+              ],
             ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            SizedBox(height: 24.0),
-            ElevatedButton(
-              onPressed: () {
-                final User user = User(
-                    username: usernameController.text,
-                    password: passwordController.text,
-                    profileImagePath: ""); // hhhhhhhhhhhhhhhhhhhhhh
-                context.read<AuthProvider>().signin(user: user).then((token) {
-                  if (token.isNotEmpty) {
-                    context.read<AuthProvider>().token = token;
-                    print("SIGN IN TOKEN $token");
-                    GoRouter.of(context).go("/homepage");
-                  }
-                  // Example: Print the username and password}
-                });
-              },
-              child: Text('Sign In'),
-            ),
-            SizedBox(height: 6.0),
-            TextButton(
-                onPressed: () {
-                  context.go("/");
-                },
-                child: Text("Don't have an account? Sign up")),
           ],
         ),
       ),

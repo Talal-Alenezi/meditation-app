@@ -60,42 +60,60 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
+        child: ListView(
           children: [
-            SizedBox(
-              height: 85,
-            ),
-            GestureDetector(
-              onTap: _getImage,
-              child: CircleAvatar(
-                radius: 50.0,
-                backgroundImage: _image != null ? FileImage(_image!) : null,
-                child:
-                    _image == null ? Icon(Icons.camera_alt, size: 50.0) : null,
-              ),
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: usernameController,
-              decoration: InputDecoration(labelText: 'Username'),
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            SizedBox(height: 24.0),
-            ElevatedButton(
-              onPressed: signUp,
-              child: Text('Sign Up'),
-            ),
-            SizedBox(height: 6.0),
-            TextButton(
-              onPressed: () {
-                GoRouter.of(context).go("/signin");
-              },
-              child: Text('Already have an account'),
+            Column(
+              children: [
+                SizedBox(
+                  height: 85,
+                ),
+                GestureDetector(
+                  onTap: _getImage,
+                  child: CircleAvatar(
+                    backgroundColor: Color.fromARGB(255, 208, 224, 236),
+                    radius: 50.0,
+                    backgroundImage: _image != null ? FileImage(_image!) : null,
+                    child: _image == null
+                        ? Icon(Icons.camera_alt, size: 50.0)
+                        : null,
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                TextField(
+                  controller: usernameController,
+                  decoration: InputDecoration(labelText: 'Username'),
+                ),
+                SizedBox(height: 16.0),
+                TextField(
+                  controller: passwordController,
+                  decoration: InputDecoration(labelText: 'Password'),
+                  obscureText: true,
+                ),
+                SizedBox(height: 24.0),
+                ElevatedButton(
+                  onPressed: signUp,
+                  child: Text(
+                    'Sign Up',
+                    style: TextStyle(
+                        color: const Color.fromARGB(255, 122, 128, 133),
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(height: 6.0),
+                TextButton(
+                  onPressed: () {
+                    GoRouter.of(context).go("/signin");
+                  },
+                  child: Text('Already have an account',
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 155, 165, 173),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                          decorationThickness: .5)),
+                ),
+              ],
             ),
           ],
         ),

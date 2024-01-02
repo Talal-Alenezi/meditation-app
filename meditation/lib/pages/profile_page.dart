@@ -30,18 +30,35 @@ class ProfilePage extends StatelessWidget {
       body: Center(
         child: Consumer<AuthProvider>(
           builder: (context, value, child) => Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SizedBox(height: 40),
               CircleAvatar(
                 radius: 50,
-                backgroundImage: NetworkImage(""),
+                backgroundColor: Color.fromARGB(255, 202, 238, 255),
+                backgroundImage: NetworkImage(""), //user image
               ),
               SizedBox(height: 20),
-              Text(username),
+              Text(username,
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 92, 97, 100),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800)),
+              SizedBox(height: 5),
+              Divider(
+                  color: const Color.fromARGB(255, 122, 128, 133),
+                  endIndent: 20,
+                  indent: 20),
               SizedBox(height: 20),
-              Text(
-                'Finished Exercises:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Container(
+                  alignment: Alignment.topLeft,
+                  child: Text('Finished Exercises:',
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 92, 97, 100),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold)),
+                ),
               ),
             ],
           ),

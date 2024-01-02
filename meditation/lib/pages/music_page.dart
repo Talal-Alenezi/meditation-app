@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:meditation/providers/exercises_provider.dart';
+
+import 'package:meditation/providers/music_provider.dart';
 import 'package:provider/provider.dart';
 
-class Exercises extends StatelessWidget {
-  const Exercises({super.key});
+class MusicPage extends StatelessWidget {
+  const MusicPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Yoga'),
+        title: const Text('Music'),
         actions: [
           IconButton(
             icon: Icon(Icons.person),
@@ -21,31 +22,30 @@ class Exercises extends StatelessWidget {
         ],
       ),
       body: FutureBuilder(
-        future: context.read<ExercisesProvider>().getExercises(),
+        future: context.read<MusicProvider>().getMusic(),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.error != null) {
             return const Center(child: Text('An error occurred'));
           } else {
-            return Consumer<ExercisesProvider>(
-              builder: (context, exercisesProvider, child) {
+            return Consumer<MusicProvider>(
+              builder: (context, musicProvider, child) {
                 return ListView.builder(
                   shrinkWrap: true,
-                  itemCount: exercisesProvider.exercisesList.length,
+                  itemCount: musicProvider.musicList.length,
                   itemBuilder: (context, index) {
-                    String videoUrl =
-                        exercisesProvider.exercisesList[index].file ?? '';
                     return Card(
                       child: ListTile(
-                        title: Text(
-                            "${exercisesProvider.exercisesList[index].title}"),
+                        title: Text("${musicProvider.musicList[index].title}"),
                         subtitle: ElevatedButton(
                           onPressed: () {
+                            final musicUrl =
+                                musicProvider.musicList[index].file;
                             GoRouter.of(context)
-                                .push("/mediaPlayer", extra: videoUrl);
+                                .push("/mediaPlayer", extra: musicUrl);
                           },
-                          child: Text("Watch Exercise Video"),
+                          child: Text("Listen to the music track"),
                         ),
                       ),
                     );

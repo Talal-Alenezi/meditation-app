@@ -34,27 +34,32 @@ ThemeData lightMode = ThemeData(
             backgroundColor: MaterialStatePropertyAll(
       Color.fromARGB(255, 214, 231, 243),
     ))));
+
+////////////////
+
+//////////////
 ThemeData darkMode = ThemeData(
     tabBarTheme: const TabBarTheme(
-        indicatorColor: Color.fromARGB(255, 122, 128, 133),
+        dividerColor: Color.fromARGB(255, 122, 128, 133),
+        indicatorColor: Color.fromARGB(255, 180, 188, 195),
         labelStyle: TextStyle(
             color: Color.fromARGB(255, 255, 255, 255),
             fontSize: 17,
             fontWeight: FontWeight.bold),
-        unselectedLabelColor: Color.fromARGB(255, 122, 128, 133)),
+        unselectedLabelColor: Color.fromARGB(255, 255, 255, 255)),
     listTileTheme: const ListTileThemeData(
         titleTextStyle:
-            TextStyle(color: Color.fromARGB(255, 45, 74, 65), fontSize: 17),
+            TextStyle(color: Color.fromARGB(255, 171, 205, 193), fontSize: 17),
         subtitleTextStyle: TextStyle(
-            color: Color.fromARGB(255, 74, 91, 85),
+            color: Color.fromARGB(255, 55, 70, 65),
             fontWeight: FontWeight.bold),
-        iconColor: Color.fromARGB(255, 122, 128, 133)),
-    dialogBackgroundColor: Color.fromARGB(255, 99, 119, 120),
-    iconTheme: const IconThemeData(color: Color.fromARGB(255, 121, 127, 136)),
+        iconColor: Color.fromARGB(255, 0, 0, 0)),
+    dialogBackgroundColor: Color.fromARGB(255, 184, 222, 224),
+    iconTheme: const IconThemeData(color: Color.fromARGB(255, 130, 190, 199)),
     iconButtonTheme: const IconButtonThemeData(
         style: ButtonStyle(
             iconColor:
-                MaterialStatePropertyAll(Color.fromARGB(255, 122, 128, 133)))),
+                MaterialStatePropertyAll(Color.fromARGB(255, 255, 255, 255)))),
     cardTheme: const CardTheme(color: Color.fromARGB(255, 131, 149, 151)),
     scaffoldBackgroundColor: Color.fromARGB(255, 67, 74, 75),
     appBarTheme: const AppBarTheme(
@@ -62,9 +67,9 @@ ThemeData darkMode = ThemeData(
             color: Color.fromARGB(255, 255, 255, 255),
             fontSize: 25,
             fontWeight: FontWeight.bold),
-        backgroundColor: Color.fromARGB(255, 106, 115, 116)),
+        backgroundColor: Color.fromARGB(255, 84, 91, 92)),
     elevatedButtonTheme: const ElevatedButtonThemeData(
         style: ButtonStyle(
             backgroundColor: MaterialStatePropertyAll(
-      Color.fromARGB(255, 183, 191, 197),
+      Color.fromARGB(255, 183, 193, 201),
     ))));

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:meditation/pages/exercises.dart';
 import 'package:meditation/pages/home_page.dart';
+import 'package:meditation/pages/media_player_page.dart';
+import 'package:meditation/pages/music_page.dart';
 import 'package:meditation/pages/profile_page.dart';
 import 'package:meditation/pages/sessions.dart';
 import 'package:meditation/pages/signin_page.dart';
@@ -9,9 +11,11 @@ import 'package:meditation/pages/signup_page.dart';
 import 'package:meditation/pages/tips_page.dart';
 import 'package:meditation/providers/auth_povider.dart';
 import 'package:meditation/providers/exercises_provider.dart';
+import 'package:meditation/providers/music_provider.dart';
 import 'package:meditation/providers/sessions_provider.dart';
 import 'package:meditation/providers/tips_provider.dart';
 import 'package:meditation/theme/theme.dart';
+import 'package:meditation/theme/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -19,7 +23,9 @@ void main() {
     ChangeNotifierProvider(create: (context) => AuthProvider()),
     ChangeNotifierProvider(create: (context) => TipsProvider()),
     ChangeNotifierProvider(create: (context) => ExercisesProvider()),
-    ChangeNotifierProvider(create: (context) => SessionProvider())
+    ChangeNotifierProvider(create: (context) => SessionProvider()),
+    ChangeNotifierProvider(create: (context) => ThemeProvider()),
+    ChangeNotifierProvider(create: (context) => MusicProvider()),
   ], child: MyApp()));
 }
 
@@ -72,6 +78,22 @@ final GoRouter _router = GoRouter(
         return Sessions();
       },
     ),
+    GoRoute(
+      name: "mediaPlayer",
+      path: '/mediaPlayer',
+      builder: (BuildContext context, GoRouterState state) {
+        return MediaPlayerPage(
+          videoUrl: state.extra as String,
+        );
+      },
+    ),
+    GoRoute(
+      name: "music",
+      path: '/music',
+      builder: (BuildContext context, GoRouterState state) {
+        return MusicPage();
+      },
+    ),
     // GoRoute(
     //   path: '/',
     //   builder: (BuildContext context, GoRouterState state) {
@@ -92,7 +114,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      theme: iconbool ? lightTheme : lightTheme,
+      themeMode: ThemeMode.system,
+      theme: Provider.of<ThemeProvider>(context).themeData,
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
     );

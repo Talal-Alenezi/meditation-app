@@ -3,9 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:meditation/providers/auth_povider.dart';
 import 'package:meditation/theme/theme.dart';
+import 'package:meditation/theme/theme_provider.dart';
 import 'package:provider/provider.dart';
 
-bool iconbool = true;
+bool iconbool = false;
 IconData _iconlight = Icons.sunny;
 IconData _icondark = Icons.nights_stay;
 var darkTheme;
@@ -31,6 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('User Profile'),
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         actions: [
           IconButton(
               onPressed: () {
@@ -41,10 +43,12 @@ class _ProfilePageState extends State<ProfilePage> {
               onPressed: () {
                 setState(() {
                   iconbool = !iconbool;
-                  if (iconbool == false) {
-                    lightTheme = lightMode;
-                  } else
-                    darkTheme = darkMode;
+                  Provider.of<ThemeProvider>(context, listen: false)
+                      .toggleTheme();
+                  // if (iconbool == false) {
+                  //   lightTheme = lightMode;
+                  // } else
+                  //   darkTheme = darkMode;
                 });
               },
               icon: Icon(iconbool ? _icondark : _iconlight))

@@ -36,11 +36,20 @@ class Sessions extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return Card(
                       child: ListTile(
-                        title: Text(
-                            "${sessionProvider.sessionsList[index].title}"),
-                        // subtitle:
-                        //     Text('${sessionProvider.sessionsList[index].file}'),
-                      ),
+                          title: Text(
+                              "${sessionProvider.sessionsList[index].title}"),
+                          subtitle: ElevatedButton(
+                              onPressed: () {
+                                final sessionUrl =
+                                    sessionProvider.sessionsList[index].file;
+                                GoRouter.of(context)
+                                    .push("/mediaPlayer", extra: sessionUrl);
+                              },
+                              child: Text(
+                                "watch session",
+                                style: TextStyle(
+                                    color: const Color.fromARGB(255, 0, 0, 0)),
+                              ))),
                     );
                   },
                 );

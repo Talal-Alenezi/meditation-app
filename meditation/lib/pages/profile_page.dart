@@ -51,7 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   //   darkTheme = darkMode;
                 });
               },
-              icon: Icon(iconbool ? _icondark : _iconlight))
+              icon: Icon(iconbool ? _iconlight : _icondark))
         ],
       ),
       body: Center(

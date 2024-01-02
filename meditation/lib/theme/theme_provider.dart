@@ -3,7 +3,7 @@ import 'package:meditation/theme/theme.dart';
 
 class ThemeProvider with ChangeNotifier {
   //  = lightmode;
-  ThemeData _themeData = darkMode;
+  ThemeData _themeData = lightMode;
   ThemeData get themeData => _themeData;
 
   set themeData(ThemeData themeData) {

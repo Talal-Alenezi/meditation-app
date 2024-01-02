@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 ThemeData lightMode = ThemeData(
+    progressIndicatorTheme: ProgressIndicatorThemeData(color: Colors.black),
     tabBarTheme: const TabBarTheme(
         indicatorColor: Color.fromARGB(255, 122, 128, 133),
         labelStyle: TextStyle(
@@ -39,6 +40,7 @@ ThemeData lightMode = ThemeData(
 
 //////////////
 ThemeData darkMode = ThemeData(
+    progressIndicatorTheme: ProgressIndicatorThemeData(color: Colors.white),
     tabBarTheme: const TabBarTheme(
         dividerColor: Color.fromARGB(255, 122, 128, 133),
         indicatorColor: Color.fromARGB(255, 180, 188, 195),

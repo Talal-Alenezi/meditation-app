@@ -4,6 +4,7 @@ import 'package:meditation/pages/exercises.dart';
 import 'package:meditation/pages/home_page.dart';
 import 'package:meditation/pages/media_player_page.dart';
 import 'package:meditation/pages/music_page.dart';
+import 'package:meditation/pages/onboardingscreen.dart';
 import 'package:meditation/pages/profile_page.dart';
 import 'package:meditation/pages/sessions.dart';
 import 'package:meditation/pages/signin_page.dart';
@@ -92,6 +93,13 @@ final GoRouter _router = GoRouter(
       path: '/music',
       builder: (BuildContext context, GoRouterState state) {
         return MusicPage();
+      },
+    ),
+    GoRoute(
+      name: "intro",
+      path: '/intro',
+      builder: (BuildContext context, GoRouterState state) {
+        return OnboardingScreen();
       },
     ),
     // GoRoute(

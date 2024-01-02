@@ -2,11 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:meditation/providers/auth_povider.dart';
+import 'package:meditation/theme/theme.dart';
 import 'package:provider/provider.dart';
 
-class ProfilePage extends StatelessWidget {
+bool iconbool = true;
+IconData _iconlight = Icons.sunny;
+IconData _icondark = Icons.nights_stay;
+var darkTheme;
+var lightTheme;
+
+class ProfilePage extends StatefulWidget {
   ProfilePage({super.key});
 
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     String username = '';
@@ -24,7 +36,18 @@ class ProfilePage extends StatelessWidget {
               onPressed: () {
                 context.go("/signin");
               },
-              icon: Icon(Icons.logout))
+              icon: Icon(Icons.logout)),
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  iconbool = !iconbool;
+                  if (iconbool == false) {
+                    lightTheme = lightMode;
+                  } else
+                    darkTheme = darkMode;
+                });
+              },
+              icon: Icon(iconbool ? _icondark : _iconlight))
         ],
       ),
       body: Center(

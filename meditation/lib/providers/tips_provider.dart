@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-
 import 'package:meditation/models/tips_model.dart';
 import 'package:meditation/services/tips_service.dart';
 
 class TipsProvider extends ChangeNotifier {
   List<Tips> tipsList = [];
   List<Tips> myTipsList = [];
+  List<Tips> filteredTipsList = [];
 
   final _tipsService = TipsServices();
 
   Future<void> getTips() async {
     tipsList = await _tipsService.getTips();
+    filteredTipsList = tipsList;
     notifyListeners();
   }
 
@@ -24,5 +25,18 @@ class TipsProvider extends ChangeNotifier {
   addTip(newTip) async {
     await _tipsService.addTip(newTip);
     getTips();
+  }
+
+  void searchTips(String query) {
+    if (query.isEmpty) {
+      filteredTipsList = tipsList;
+    } else {
+      filteredTipsList = tipsList
+          .where((tip) =>
+              tip.text!.toLowerCase().contains(query.toLowerCase()) ||
+              tip.author!.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
+    notifyListeners();
   }
 }

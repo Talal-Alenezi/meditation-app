@@ -18,6 +18,8 @@ class _TipsPageState extends State<TipsPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   TextEditingController tipController = TextEditingController();
+  TextEditingController searchController =
+      TextEditingController(); // Add search controller
 
   @override
   void initState() {
@@ -106,141 +108,162 @@ class _TipsPageState extends State<TipsPage>
   }
 
   Widget _buildTipsList(BuildContext context) {
-    return FutureBuilder(
-      future: context.read<TipsProvider>().getTips(),
-      builder: (context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.error != null) {
-          return const Center(child: Text('An error occurred'));
-        } else {
-          return Consumer<TipsProvider>(
-            builder: (context, tipsProvider, child) {
-              //to sort the tips by the votes
-              tipsProvider.tipsList.sort((case1, case2) =>
-                  (case2.upvotesCount - case2.downvotesCount)
-                      .compareTo(case1.upvotesCount - case1.downvotesCount));
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: tipsProvider.tipsList.length,
-                itemBuilder: (context, index) {
-                  ///upvote & downvote
-
-                  String username = '';
-                  final token = context.watch<AuthProvider>().token;
-                  if (token.isNotEmpty) {
-                    Map<String, dynamic>? decodedToken = Jwt.parseJwt(token);
-                    username = decodedToken['username'];
-                    print('Username from token: $username');
-                  }
-
-                  var upvoteTips = [];
-                  var downvoteTips = [];
-
-                  Future<void> upvoteTip(int? Id) async {
-                    if (!upvoteTips.contains(Id)) {
-                      try {
-                        await ApiClient.put('/tips/$Id/upvote');
-                        final upvote =
-                            tipsProvider.tipsList.firstWhere((e) => e.id == Id);
-                        if (upvote.upvotes!.isNotEmpty) {
-                          setState(() {
-                            upvote.upvotesCount++;
-                            upvote.upvotes?.add(username);
-
-                            if (upvote.downvotes!.contains(username)) {
-                              upvote.downvotes!.remove(username);
-                              upvote.downvotesCount--;
-                            }
-                          });
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: searchController,
+            onChanged: (value) {
+              context.read<TipsProvider>().searchTips(value);
+            },
+            decoration: InputDecoration(
+              labelText: 'Search by text or author',
+              prefixIcon: Icon(Icons.search),
+            ),
+          ),
+        ),
+        Expanded(
+          child: FutureBuilder(
+            future: context.read<TipsProvider>().getTips(),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.error != null) {
+                return const Center(child: Text('An error occurred'));
+              } else {
+                return Consumer<TipsProvider>(
+                  builder: (context, tipsProvider, child) {
+                    tipsProvider.tipsList.sort((case1, case2) =>
+                        (case2.upvotesCount - case2.downvotesCount).compareTo(
+                            case1.upvotesCount - case1.downvotesCount));
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: tipsProvider.filteredTipsList.length,
+                      // Use filteredTipsList instead of tipsList
+                      itemBuilder: (context, index) {
+                        String username = '';
+                        final token = context.watch<AuthProvider>().token;
+                        if (token.isNotEmpty) {
+                          Map<String, dynamic>? decodedToken =
+                              Jwt.parseJwt(token);
+                          username = decodedToken['username'];
+                          print('Username from token: $username');
                         }
-                      } catch (error) {
-                        print('Error upvoting tip: $error');
-                      }
-                    }
-                    tipsProvider.getTips();
-                  }
 
-                  Future<void> downvoteTip(int? Id) async {
-                    if (!downvoteTips.contains(Id)) {
-                      try {
-                        await ApiClient.put('/tips/$Id/downvote');
-                        final downvote =
-                            tipsProvider.tipsList.firstWhere((e) => e.id == Id);
-                        if (downvote.downvotes!.isNotEmpty) {
-                          setState(() {
-                            downvote.downvotesCount++;
-                            downvote.downvotes?.add(username);
+                        var upvoteTips = [];
+                        var downvoteTips = [];
 
-                            if (downvote.upvotes!.contains(username)) {
-                              downvote.upvotes!.remove(username);
-                              downvote.upvotesCount--;
+                        Future<void> upvoteTip(int? Id) async {
+                          if (!upvoteTips.contains(Id)) {
+                            try {
+                              await ApiClient.put('/tips/$Id/upvote');
+                              final upvote = tipsProvider.filteredTipsList
+                                  .firstWhere((e) => e.id == Id);
+                              if (upvote.upvotes!.isNotEmpty) {
+                                setState(() {
+                                  upvote.upvotesCount++;
+                                  upvote.upvotes?.add(username);
+
+                                  if (upvote.downvotes!.contains(username)) {
+                                    upvote.downvotes!.remove(username);
+                                    upvote.downvotesCount--;
+                                  }
+                                });
+                              }
+                            } catch (error) {
+                              print('Error upvoting tip: $error');
                             }
-                          });
+                          }
+                          tipsProvider.getTips();
                         }
-                      } catch (error) {
-                        print('Error upvoting tip: $error');
-                      }
-                    }
-                    tipsProvider.getTips();
-                  }
 
-                  //share function
-                  void shareTip(String? text) {
-                    Share.share(text!);
-                  }
+                        Future<void> downvoteTip(int? Id) async {
+                          if (!downvoteTips.contains(Id)) {
+                            try {
+                              await ApiClient.put('/tips/$Id/downvote');
+                              final downvote = tipsProvider.filteredTipsList
+                                  .firstWhere((e) => e.id == Id);
+                              if (downvote.downvotes!.isNotEmpty) {
+                                setState(() {
+                                  downvote.downvotesCount++;
+                                  downvote.downvotes?.add(username);
 
-                  return Card(
-                    child: ListTile(
-                      title: Text("${tipsProvider.tipsList[index].text}"),
-                      subtitle:
-                          Text('By: ${tipsProvider.tipsList[index].author}'),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              upvoteTip(tipsProvider.tipsList[index].id);
-                            },
-                            icon: Icon(
-                              Icons.arrow_drop_up,
-                              color: Colors.green,
+                                  if (downvote.upvotes!.contains(username)) {
+                                    downvote.upvotes!.remove(username);
+                                    downvote.upvotesCount--;
+                                  }
+                                });
+                              }
+                            } catch (error) {
+                              print('Error upvoting tip: $error');
+                            }
+                          }
+                          tipsProvider.getTips();
+                        }
+
+                        void shareTip(String? text) {
+                          Share.share(text!);
+                        }
+
+                        return Card(
+                          child: ListTile(
+                            title: Text(
+                                "${tipsProvider.filteredTipsList[index].text}"),
+                            // Use filteredTipsList instead of tipsList
+                            subtitle: Text(
+                                'By: ${tipsProvider.filteredTipsList[index].author}'),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    upvoteTip(tipsProvider
+                                        .filteredTipsList[index].id);
+                                  },
+                                  icon: Icon(
+                                    Icons.arrow_drop_up,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                                Text(
+                                  '${tipsProvider.filteredTipsList[index].upvotes?.length}',
+                                ),
+                                SizedBox(width: 10),
+                                IconButton(
+                                  onPressed: () {
+                                    downvoteTip(tipsProvider
+                                        .filteredTipsList[index].id);
+                                  },
+                                  icon: Icon(Icons.arrow_drop_down,
+                                      color: Colors.red),
+                                ),
+                                Text(
+                                  '${tipsProvider.filteredTipsList[index].downvotes?.length}',
+                                ),
+                                SizedBox(width: 30),
+                                IconButton(
+                                    onPressed: () {
+                                      shareTip(tipsProvider
+                                          .filteredTipsList[index].text);
+                                    },
+                                    icon: Icon(
+                                      Icons.share,
+                                      size: 20,
+                                    )),
+                              ],
                             ),
                           ),
-                          Text(
-                            '${tipsProvider.tipsList[index].upvotes?.length}',
-                          ),
-                          SizedBox(width: 10),
-                          IconButton(
-                            onPressed: () {
-                              downvoteTip(tipsProvider.tipsList[index].id);
-                            },
-                            icon:
-                                Icon(Icons.arrow_drop_down, color: Colors.red),
-                          ),
-                          Text(
-                            '${tipsProvider.tipsList[index].downvotes?.length}',
-                          ),
-                          SizedBox(width: 30),
-                          // share button
-                          IconButton(
-                              onPressed: () {
-                                shareTip(tipsProvider.tipsList[index].text);
-                              },
-                              icon: Icon(
-                                Icons.share,
-                                size: 20,
-                              )),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              );
+                        );
+                      },
+                    );
+                  },
+                );
+              }
             },
-          );
-        }
-      },
+          ),
+        ),
+      ],
     );
   }
 
@@ -262,7 +285,6 @@ class _TipsPageState extends State<TipsPage>
         } else {
           return Consumer<TipsProvider>(
             builder: (context, tipsProvider, child) {
-              /// to delete myTip
               var deletedTips = [];
               Future<void> deleteTip(int? id) async {
                 if (deletedTips.contains(id)) {}
